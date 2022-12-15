@@ -4,26 +4,22 @@
 #include <cstdlib> 
 class character {
 public:
-    
-  
     virtual void move() = 0;
-   
-    
 };
-class enemy  {
+class enemy {
 public:
     int hp, base_dmg, def;
     int att();
+    int att(int df);
     int get_dmg(int a);
     int statement = 1;
     enemy();
-private:
-   
     void  draw(int a);
-
+private:
+    int color;
 };
 class player :public enemy {
-	
+
 public:
     int sp, mg_dmg;
     int mg();
@@ -36,21 +32,21 @@ int getrand()
     int r;
     srand(time(NULL));
     r = rand();
-    return r % 19;
+    return r;
 }
 
 
 int main_menu()
 {
 
-	std::cout << std::endl  << "1.Player vs Computer " << std::endl;
+    std::cout << std::endl << "1.Player vs Computer " << std::endl;
     std::cout << std::endl << "2.Computer vs computer" << std::endl;
-    
+
     std::cout << std::endl << "3.exit" << std::endl;
-	
-	int R;
-	std::cin >> R;
-	return R;
+
+    int R;
+    std::cin >> R;
+    return R;
 }
 
 int battle_menu()
@@ -69,17 +65,20 @@ int battle_menu()
 int main()
 {
     int R, d, m, hpe1, hpe2, hpp, menu;
-    enemy en1, en2;
+    enemy en1;
+    enemy en2;
     player pl;
     hpp = pl.hp;
     hpe1 = en1.hp;
-    hpe2=en2.hp;
+    hpe2 = en2.hp;
     bool check = 0;
     menu = main_menu();
+    int a = 1;
 
     switch (menu) {
     case 1:
         while (check != 1) {
+            system("color 07");
             R = battle_menu();
             switch (R)
             {
@@ -87,6 +86,7 @@ int main()
             case 1:
                 d = pl.att();
                 check = en1.get_dmg(d);
+                std::cout << std::endl << "Fighter  hp: " << en1.hp << std::endl;
                 std::cout << std::endl << "You dealed " << d << "damage" << std::endl;
                 en1.statement = ((en1.hp * 10) / hpe1) / 2;
 
@@ -99,6 +99,7 @@ int main()
 
                 m = pl.mg();
                 check = en1.get_dmg(m);
+                std::cout << std::endl << "Fighter  hp: " << en1.hp << std::endl;
                 std::cout << std::endl << "You dealed " << m << " mage damage" << std::endl;
                 if (check == 1) {
                     break;
@@ -108,7 +109,7 @@ int main()
                 pl.def += 2;
 
             case 5:
-                if (rand() % 2) {
+                if ((getrand() % 2) == 0) {
                     std::cout << std::endl << "You escaped!" << std::endl;
                     break;
                     check = 1;
@@ -121,45 +122,56 @@ int main()
             }
             if (check == 1) {
                 break;
+                continue;
             }
+            Sleep(5000);
 
             d = en1.att();
-            std::cout << std::endl << "You get " << d << "damage" << std::endl;
+            std::cout << std::endl << "Yor  hp: " << pl.hp << std::endl;
+            std::cout << std::endl << "You get " << d << " damage" << std::endl;
             check = pl.get_dmg(d);
             if (check == 1) {
                 std::cout << std::endl << "You lose!" << std::endl;
                 break;
             }
-            system("07");
-            Sleep(3000);
+            system("color 02");
+            Sleep(5000);
 
-            
+
 
         }
         break;
     case 2:
+        std::cout << std::endl << "Fighter 1 hp: " << en1.hp << std::endl;
+        std::cout << std::endl << "Fighter 2 hp: " << en1.hp << std::endl;
         while (check != 1) {
-            
-            d = en1.att();
-            std::cout << std::endl << "Get " << d << "damage" << std::endl;
-            check = en2.get_dmg(d);
-            if (check == 1) {
-                std::cout << std::endl << "You lose!" << std::endl;
-                break;
-            }
-            Sleep(3000);
-            
-            d = en2.att();
-            std::cout << std::endl << "Get " << d << "damage" << std::endl;
-            check = en1.get_dmg(d);
-            if (check == 1) {
-                std::cout << std::endl << "You lose!" << std::endl;
-                break;
-            }
-            
-            Sleep(3000);
-            std::cout << std::endl << "=================================================" << std::endl;
 
+
+            system("color 02");
+            d = en1.att();
+            std::cout << std::endl << "Fighter 2 get " << d << " damage" << std::endl;
+            check = en2.get_dmg(d);
+            en2.draw(a);
+
+            if (check == 1) {
+                std::cout << std::endl << "Fighter 2 loose!" << std::endl;
+                break;
+            }
+            Sleep(5000);
+            system("color 03");
+            std::cout << std::endl << "Fighter 1 hp: " << en1.hp << std::endl;
+            d = en2.att();
+            std::cout << std::endl << "Fighter 1 get " << d << "damage" << std::endl;
+            check = en1.get_dmg(d);
+            en1.draw(a + 1);
+            if (check == 1) {
+                std::cout << std::endl << "Figther 1 loose!" << std::endl;
+                break;
+            }
+
+            Sleep(5000);
+            std::cout << std::endl << "=================================================" << std::endl;
+            a++;
         }
         break;
     case 3:
@@ -168,14 +180,18 @@ int main()
 }
 
 enemy::enemy() {
-    hp = rand() % 100 + 1;
-    base_dmg = rand() % 10 + 1;
-    def = rand() % 5 + 1;
-    
+    hp = getrand() % 100 + 1;
+    base_dmg = getrand() % 10 + 1;
+    def = getrand() % 5 + 1;
+
 };
 int enemy::att() {
-    int a = base_dmg + rand() % 10;
+    int a = base_dmg + getrand() % 10 + 1;
+
     return a;
+}
+int enemy::att(int a) {
+    return 0;
 }
 int player::mg() {
     if (sp < 10) {
@@ -184,69 +200,65 @@ int player::mg() {
     }
     else {
 
-        int a = mg_dmg + rand() % 10;
+        int a = mg_dmg + getrand() % 10;
         sp -= 10;
         return a;
     }
 }
 
 int enemy::get_dmg(int dm) {
-    hp -= dm-def;
-    int a = rand() % 5 + 1;
+    hp -= dm - def;
+
     if (hp > 0) {
-        if (a== 5) {
-            draw(a);
-            return 1;
-        }
-        else {
-            draw(a);
-            return 0;
-        }
-        
+        return 0;
+
     }
     else {
         return 1;
     }
-    
+
 }
-player::player() { 
-    hp = rand() % 100 + 1;
-    base_dmg = rand() % 10 + 1;
-    def = rand() % 5 + 1;
-    mg_dmg = rand() % 20 + 1;
+player::player() {
+    hp = getrand() % 100 + 1;
+    base_dmg = getrand() % 10 + 1;
+    def = getrand() % 5 + 1;
+    mg_dmg = getrand() % 20 + 1;
     sp = 100;
 
 }
 void enemy::draw(int a) {
-    
-    printf(" o |\n/|\\|\n ^    \n/ \\   " " \n");
+
+
     switch (a)
     {
 
     case 1:
-        
+
         printf(" o |\n/|\\|\n ^    \n/ \\   " " \n");
-        
+
         break;
     case 2:
         printf(" o |\n |\\|\n ^    \n/ \\   " " \n");
-        printf("Lose hand");
-        
+        printf("Lose hand/n");
+
         break;
     case 3:
-        printf(" o |\n |\\|\n ^    \n/ \\   " " \n");
-        
+        printf(" o \n |\n ^    \n/ \\   " " \n");
+        printf("Lose hand/n");
+
         break;
     case 4:
-        printf(" o |\n |\\|\n ^    \n/ \\   " " \n");
-        
+        printf(" o \n |\\|\n ^    \n  \\   " " \n");
+        printf("Lose leg/n");
         break;
     case 5:
-        printf("   |\n |\\|\n ^    \n/ \\   " " \n");
-        printf("Lose head/n");
-        
+        printf(" o  \n |\\|\n ^    \n      " " \n");
+        printf("Lose leg/n");
+
         break;
     }
-    
+    if (a > 5) {
+        printf(" o  \n |\\|\n ^    \n/ \\   " " \n");
+    }
 }
 
