@@ -4,22 +4,24 @@
 #include <cstdlib> 
 class character {
 public:
+    virtual int get_dmg()=0;
+    virtual in att()=0;
+    virtual void draw()=0;
     virtual void move() = 0;
 };
-class enemy {
+class enemy :public character {
+private:
+    int hp, base_dmg, def, statement=1, color;
+
 public:
-    int hp, base_dmg, def;
-    int att();
     int att(int df);
     int get_dmg(int a);
-    int statement = 1;
-    enemy();
     void  draw(int a);
-private:
-    int color;
+    enemy();
 };
-class player :public enemy {
-
+class player :public character {
+private:
+    int hp, base_dmg, def, color;
 public:
     int sp, mg_dmg;
     int mg();
