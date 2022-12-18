@@ -23,6 +23,8 @@ class player :public character {
 private:
     int hp, base_dmg, def, color;
 public:
+    int att(df);
+    int get_dmg(int a);
     int sp, mg_dmg;
     int mg();
     player();
@@ -187,6 +189,13 @@ enemy::enemy() {
     def = getrand() % 5 + 1;
 
 };
+int player::att(){
+    int a=base_dmg +getrand()%10+1;
+    return a;
+}
+int player::att(int a) {
+    return 0;
+}
 int enemy::att() {
     int a = base_dmg + getrand() % 10 + 1;
 
@@ -209,6 +218,18 @@ int player::mg() {
 }
 
 int enemy::get_dmg(int dm) {
+    hp -= dm - def;
+
+    if (hp > 0) {
+        return 0;
+
+    }
+    else {
+        return 1;
+    }
+
+}
+int player::get_dmg(int dm) {
     hp -= dm - def;
 
     if (hp > 0) {
