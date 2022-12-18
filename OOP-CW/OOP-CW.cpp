@@ -5,7 +5,7 @@
 class character {
 public:
     virtual int get_dmg()=0;
-    virtual in att()=0;
+    virtual int att()=0;
     virtual void draw()=0;
     virtual void move() = 0;
 };
@@ -17,18 +17,21 @@ public:
     int att(int df);
     int get_dmg(int a);
     void  draw(int a);
-    enemy();
+    enemy(int healt):hp(health),base_dmg(a), color(a)
+    {
+    }
 };
 class player :public character {
 private:
     int hp, base_dmg, def, color;
 public:
-    int att(df);
+    int att(int df);
     int get_dmg(int a);
     int sp, mg_dmg;
     int mg();
-    player();
-
+    player(int health): hp(health), base_dmg(a), color(a)
+    {
+    }
 };
 
 int getrand()
